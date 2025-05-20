@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Appointment Form</title>
+  <style>
+    /* Reset and Fonts */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+      background-image: url('https://img.freepik.com/free-vector/medical-healthcare-blue-color_1017-26807.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: bgShift 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgShift {
+      0% { background-position: left top; }
+      100% { background-position: right bottom; }
+    }
+
+    .appointment-form {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      padding: 40px 50px;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 600px;
+      animation: fadeIn 1.5s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+    }
+
+    .appointment-form h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #101010;
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      color: #100f0f;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-size: 15px;
+      background-color: rgba(255, 255, 255, 0.8);
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      background-color: #ffffff;
+      box-shadow: 0 0 5px #66a6ff;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.4s ease;
+      font-weight: bold;
+    }
+
+    .btn-submit:hover {
+      background: linear-gradient(to right, #0072ff, #00c6ff);
+      transform: scale(1.02);
+    }
+
+    @media (max-width: 600px) {
+      .appointment-form {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <form class="appointment-form">
+    <h2>Book Your Appointment</h2>
+
+    <div class="form-group">
+      <label for="fullname">Full Name</label>
+      <input type="text" id="fullname" name="fullname" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone" required>
+    </div>
+
+    <div class="form-group">
+      <label for="date">Preferred Date</label>
+      <input type="date" id="date" name="date" required>
+    </div>
+
+    <div class="form-group">
+      <label for="time">Preferred Time</label>
+      <input type="time" id="time" name="time" required>
+    </div>
+
+    <div class="form-group">
+      <label for="doctor">Select Doctor</label>
+      <select id="doctor" name="doctor" required>
+        <option value="">-- Choose Doctor --</option>
+        <option value="dr_smith">Dr. Smith - Cardiologist</option>
+        <option value="dr_jones">Dr. Jones - Neurologist</option>
+        <option value="dr_kumar">Dr. Kumar - Orthopedic</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="payment">Payment Method</label>
+      <select id="payment" name="payment" required>
+        <option value="">-- Select Payment Method --</option>
+        <option value="cash">Cash at Clinic</option>
+        <option value="upi">UPI</option>
+        <option value="card">Credit/Debit Card</option>
+        <option value="netbanking">Net Banking</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="message">Reason for Visit</label>
+      <textarea id="message" name="message" rows="4" placeholder="Describe symptoms or concerns..."></textarea>
+    </div>
+
+    <button type="submit" class="btn-submit">Submit Appointment</button>
+    <!-- Replace this with actual client ID -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
+
+<div id="paypal-button-container" style="margin-top: 20px;"></div>
+
+<script>
+  paypal.Buttons({
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: '10.00' // Change to actual amount
+          }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        alert('Payment completed by ' + details.payer.name.given_name);
+      });
+    }
+  }).render('#paypal-button-container');
+</script>
+
+  </form>
+
+</body>
+</html>
